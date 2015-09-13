@@ -18,29 +18,20 @@ grad = zeros(size(theta));
 %               derivatives of the cost w.r.t. each parameter in theta
 
 
-h = sigmoid(X * theta);
+%========================Compute costFunc=======================
+H = sigmoid(X*theta);
+T = y.*log(H) + (1 - y).*log(1 - H);
+J = -1/m*sum(T) + lambda/(2*m)*sum(theta(2:end).^2);
 
-% cost term - identical to costFunction.m
-cost = (1 / m) * sum((-y .* log(h)) - ((1 - y) .* log(1 - (h))));
+%========================Compute Gradient======================
 
-% regularize term - skipping theta(0)
-% "end" keyword here refers to last element in matrix so we can subset the matrix
-regCost = (lambda / (2 * m)) * norm(theta(2:end)) ^ 2;
+for i = 1 : m,
+	grad = grad + (H(i) - y(i)) * X(i,:)';
+end
 
-% identical to costFunction.m
-grad = (1 / m) .* X' * (h - y);
+ta = [0;theta(2:end)];
 
-% regularize gradient term - skipping theta(0)
-regGrad = (lambda / m) .* theta;
-regGrad(1) = 0;
-
-% Regularization just consists of summing the original cost
-% with the regularized term.
-J = cost + regCost;
-grad = grad + regGrad;
-
-
-
+grad = 1/m*grad + lambda/m*ta;
 
 % =============================================================
 
