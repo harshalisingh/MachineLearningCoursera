@@ -41,11 +41,14 @@ error_val = zeros(length(lambda_vec), 1);
 
 
 
+for i = 1:length(lambda_vec)
+	% Calculate thetas for this theta parameters for this lambda value.
+	[thetas] = trainLinearReg(X, y, lambda_vec(i));
 
-
-
-
-
+	% Calculate errors.
+	error_train(i) = linearRegCostFunction(X, y, thetas, 0);
+	error_val(i) = linearRegCostFunction(Xval, yval, thetas, 0);
+end
 
 
 % =========================================================================

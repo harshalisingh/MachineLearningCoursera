@@ -20,14 +20,22 @@ grad = zeros(size(theta));
 %
 
 
+% Non-regular cost function for linear regression.
+h = (X * theta);
+cost = (1 / (2 * m)) * sum((h - y) .^ 2);
+
+% Regularization (ignoring theta0 term).
+reg = (lambda / (2 * m)) * sum(theta(2:end) .^ 2);
+
+% Regularized cost is just summation.
+J = cost + reg;
 
 
-
-
-
-
-
-
+% Calculate linear regression gradient.
+% Note: Little strange here, but works. We zero out theta for the j = 0
+% case because we're reusing the h(x) term calculated above.
+theta(1) = 0;
+grad = (1 / m) .* (X' * (h - y)) + ((lambda / m) .* theta);
 
 
 % =========================================================================
